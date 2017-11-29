@@ -10,6 +10,7 @@ namespace CSharpStatsAnalysis
     {
         static void Main(string[] args)
         {
+            Console.Write("hello world");
         }
     }
 }
