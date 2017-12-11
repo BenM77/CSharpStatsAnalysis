@@ -6,11 +6,15 @@ using System.Threading.Tasks;
 
 namespace CSharpStatsAnalysis
 {
-    class Program
+    class Vector<T>
     {
-        static void Main(string[] args)
-        {
+        protected T[] vecArr;
+        public Vector(){
+        }
 
+        public Type getType()
+        {
+            return typeof(T);
         }
     }
 }
