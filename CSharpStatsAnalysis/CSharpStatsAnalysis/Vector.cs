@@ -16,5 +16,15 @@ namespace CSharpStatsAnalysis
         {
             return typeof(T);
         }
+
+        public int getLength()
+        {
+            return vecArr.Length;
+        }
+
+        public T getVal(int index)
+        {
+            return vecArr[index];
+        }
     }
 }
