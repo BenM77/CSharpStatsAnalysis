@@ -30,6 +30,16 @@ namespace CSharpStatsAnalysis
             return typeof(T);
         }
 
+        public T getVal(int index)
+        {
+            return vecArr[index];
+        }
+
+        public int getLength()
+        {
+            return vecArr.Length;
+        }
+
         public T[] getMode()
         {
             Dictionary<T, int> vecDict = new Dictionary<T, int>();
