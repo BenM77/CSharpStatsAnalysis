@@ -12,7 +12,7 @@
             NumberVector nv3 = new NumberVector(arr);
             Matrix m2 = new Matrix(nv3, 2, 10);
 
-            NumberVector nv4 = m.convertToVector();
+            NumberVector nv4 = m.ConvertToVector();
             nv4.displayStats();
         }
     }

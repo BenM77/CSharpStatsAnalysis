@@ -40,7 +40,7 @@ namespace CSharpStatsAnalysis
         }
 
         // a constructor that takes two vectors as rows or columns
-        public Matrix(Vector<Object> v1, Vector<Object> v2, bool bindRow)// if bindRow is true, add the vectors as rows instead of as columns
+        public Matrix(Vector<double> v1, Vector<double> v2, bool bindRow)// if bindRow is true, add the vectors as rows instead of as columns
         {
             int v1Length = v1.getLength();
             int v2length = v2.getLength();
@@ -63,11 +63,11 @@ namespace CSharpStatsAnalysis
                 theMatrix = new Object[dimR, dimC];//the matrix will be made of objects, but when doing matrix operations, the type will checked from the MatrixType variable
                 for(int i = 0; i < v1Length; i++)//fill in row 1
                 {
-                    theMatrix[1, i] = v1.getVal(i);
+                    theMatrix[0, i] = v1.getVal(i);
                 }
                 for(int i = 0; i < v2length; i++)//fill in row 2
                 {
-                    theMatrix[2, i] = v2.getVal(i);
+                    theMatrix[1, i] = v2.getVal(i);
                 }
             }
             else//by column. the opposite of above
@@ -87,7 +87,7 @@ namespace CSharpStatsAnalysis
         }
 
         //create a new matrix by giving all the elements in a vector and the number of rows(length of each column) and vice versa for columns
-        public Matrix(Vector<Object> v1, int numRows, int numCols)
+        public Matrix(Vector<double> v1, int numRows, int numCols)
         {
             if ((numRows * numCols) < v1.getLength())
                 throw new Exception("A matrix of those dimensions does not have enough spaces for all the elements in that vector");
@@ -233,9 +233,9 @@ namespace CSharpStatsAnalysis
             return total / (dimC * dimR);//total / number of elements
         }
 
-        public Vector<Object> convertToVector()//the opposite of the second constructor-- takes a matrix and returns a vector
+        public NumberVector ConvertToVector()//the opposite of the second constructor-- takes a matrix and returns a vector
         {
-            Object[] theArray = new Object[dimC * dimR];
+            double[] theArray = new double[dimC * dimR];
             int arrayIndex = 0;
             for(int i = 0; i < dimC; i++)
                 for(int j = 0; j < dimR; j++)
@@ -243,12 +243,12 @@ namespace CSharpStatsAnalysis
                     theArray[arrayIndex] = (double)theMatrix[j, i];
                     arrayIndex++;
                 }
-                return new Vector<object>(theArray);       
+            return new NumberVector(theArray);       
         }
 
-        public object[] mode()//works with any type of matrix
+        public double[] mode()//works with any type of matrix
         {
-            Vector<object> tempVector = convertToVector();
+            NumberVector tempVector = ConvertToVector();
             return tempVector.getMode();
         }
     }

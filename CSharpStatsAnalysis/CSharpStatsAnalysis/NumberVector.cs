@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CSharpStatsAnalysis
 {
-    class NumberVector : Vector<double>
+    public class NumberVector : Vector<double>
     {
         // standard double array
         public NumberVector(double[] arr)
@@ -61,12 +61,14 @@ namespace CSharpStatsAnalysis
 
             int counter = start;
 
-            vecArr = new double[(end-start)*numRepeats];
+            vecArr = new double[(end-start+1)*numRepeats];
             for (int i = 0; i < vecArr.Length; i++)
             {
-                vecArr[i] = counter++;
+                vecArr[i] = counter;
                 if (counter == end)
                     counter = start;
+                else
+                    counter++;
             }
         }
 

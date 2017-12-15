@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CSharpStatsAnalysis
 {
-    class StringVector: Vector<string>
+    public class StringVector: Vector<string>
     {
         public StringVector(string[] arr)
         {
