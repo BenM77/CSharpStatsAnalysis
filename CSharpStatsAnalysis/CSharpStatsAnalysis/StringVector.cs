@@ -6,13 +6,11 @@ using System.Threading.Tasks;
 
 namespace CSharpStatsAnalysis
 {
-    class Program
+    class StringVector: Vector<string>
     {
-        static void Main(string[] args)
+        public StringVector(string[] arr)
         {
-            int[] arr = new int[] { 2, 2, 2 };
-            NumberVector nv = new NumberVector(0, 3,);
-            nv.display();
+            vecArr = arr;
         }
     }
 }
