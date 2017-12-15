@@ -109,7 +109,16 @@ namespace CSharpStatsAnalysis
             }
             else
             {
-                aslkjflkjsljdfls THESAMETHING;
+                if (v1.getLength() > dimR)
+                    throw new Exception("The vector is longer than the length of the column");//if it is shorter just keep the rest of the values the same
+                if (index > dimC - 1)
+                    throw new Exception("the column to replace is out of bounds of the matrix");
+                if (index < 0)
+                    throw new Exception("the column number to replace is negative");
+                for (int i = 0; i < v1.getLength(); i++)
+                {
+                    theMatrix[i, index] = v1.getVal(i);
+                }
             }
         }
 
