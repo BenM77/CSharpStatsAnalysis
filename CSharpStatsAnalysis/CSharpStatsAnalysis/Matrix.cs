@@ -29,7 +29,7 @@ namespace CSharpStatsAnalysis
             {
                 dimR = 2;
                 dimC = dimension;
-                theMatrix = new v1Type[dimR, dimC];
+                theMatrix = new Object[dimR, dimC];//the matrix will be made of objects, but when doing matrix operations, the type will checked from the MatrixType variable
                 for(int i = 0; i < v1Length; i++)//fill in row 1
                 {
                     theMatrix[1, i] = v1.getVal(i);
@@ -43,7 +43,7 @@ namespace CSharpStatsAnalysis
             {
                 dimR = dimension;
                 dimC = 2;
-                theMatrix = new v1Type[dimR, dimC];
+                theMatrix = new Object[dimR, dimC];
                 for(int i = 0; i < v1Length; i++)
                 {
                     theMatrix[i, 1] = v1.getVal(i);
@@ -60,7 +60,7 @@ namespace CSharpStatsAnalysis
         {
             if ((numRows * numCols) < v1.getLength())
                 throw new Exception("A matrix of those dimensions does not have enough spaces for all the elements in that vector");
-            theMatrix = new Array[numRows, numCols];
+            theMatrix = new Object[numRows, numCols];
             int vectorIndex = 0;
             for(int i = 0; i < numRows; i++)
             {
@@ -74,6 +74,76 @@ namespace CSharpStatsAnalysis
                         theMatrix[i, j] = 0;//leftover spaces will be filled with zeroes if the matrix is too large
                     vectorIndex++;
                 }
+            }
+        }
+
+        public void edit(int row, int column, double value)//change a specific value in the matrix
+        {
+            if (row < 0)
+                throw new Exception("the row number cannot be negative");
+            if (row > dimR)
+                throw new Exception("the row to access cannot be larger than the number of rows in the matrix");
+            if (column < 0)
+                throw new Exception("the column number cannot be negative");
+            if (column > dimC)
+                throw new Exception("the column to access cannot be larger than the number of columns in the matrix");
+            theMatrix[row, column] = value;
+        }
+
+        public void edit(Vector<Type> v1, int index, bool replaceRow)
+        {
+            if (v1.getType() != matrixType)
+                throw new Exception("the vector must have the same type as the matrix it is being put into");
+            if (replaceRow)
+            {
+                if (v1.getLength() > dimC)
+                    throw new Exception("The vector is longer than the length of the row");//if it is shorter just keep the rest of the values the same
+                if (index > dimR - 1)
+                    throw new Exception("the row to replace is out of bounds of the matrix");
+                if (index < 0)
+                    throw new Exception("the row number to replace is negative");
+                for(int i = 0; i < v1.getLength(); i++)
+                {
+                    theMatrix[index, i] = v1.getVal(i);
+                }
+            }
+            else
+            {
+                aslkjflkjsljdfls THESAMETHING;
+            }
+        }
+
+        public void display()//will work with matrices with less than 1000 rows
+        {
+            listColumns();
+            for(int i = 0; i < dimR; i++)
+            {
+                if (i < 10)
+                    Console.Write("{0}  \t");
+                else if (i < 100)
+                    Console.Write("{0} \t");
+                else
+                    Console.Write("{0}\t");
+                listRowElements(i);
+                Console.WriteLine();
+            }
+        }
+
+        private void listColumns()//the top row for the display
+        {
+            Console.Write("   \t");
+            for(int i = 0; i < dimC; i++)
+            {
+                Console.Write("{0}\t", i + 1);
+            }
+            Console.WriteLine();
+        }
+
+        private void listRowElements(int row)
+        {
+            for(int i = 0; i < dimC; i++)
+            {
+                Console.Write("{0}\t",theMatrix[row, i]);
             }
         }
     }

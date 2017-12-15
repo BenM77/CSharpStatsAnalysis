@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CSharpStatsAnalysis
 {
-    class Vector<T>
+    public class Vector<T>
     {
         protected T[] vecArr;
         public Vector(){
