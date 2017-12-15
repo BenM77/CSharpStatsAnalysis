@@ -107,18 +107,23 @@ namespace CSharpStatsAnalysis
                 }
             }
         }
-
-        public void edit(int row, int column, double value)//change a specific value in the matrix
+        
+        public void edit(int row, int column, Object value)//change a specific value in the matrix
         {
-            if (row < 0)
-                throw new Exception("the row number cannot be negative");
-            if (row > dimR)
-                throw new Exception("the row to access cannot be larger than the number of rows in the matrix");
-            if (column < 0)
-                throw new Exception("the column number cannot be negative");
-            if (column > dimC)
-                throw new Exception("the column to access cannot be larger than the number of columns in the matrix");
-            theMatrix[row, column] = value;
+            if (value is typeof(matrixType))
+            {
+                if (row < 0)
+                    throw new Exception("the row number cannot be negative");
+                if (row > dimR)
+                    throw new Exception("the row to access cannot be larger than the number of rows in the matrix");
+                if (column < 0)
+                    throw new Exception("the column number cannot be negative");
+                if (column > dimC)
+                    throw new Exception("the column to access cannot be larger than the number of columns in the matrix");
+                theMatrix[row, column] = value;
+            }
+            else
+                throw new Exception("the new value does not match the type of the elements in the matrix");
         }
 
         public void edit(Vector<Object> v1, int index, bool replaceRow)
@@ -243,7 +248,12 @@ namespace CSharpStatsAnalysis
                     theArray[arrayIndex] = (double)theMatrix[j, i];
                     arrayIndex++;
                 }
-                return new Vector<object>(theArray);       
+            //if (matrixType == typeof(Double))
+            //    return new NumberVector((double[])theArray);
+            //if (matrixType == typeof(String))
+            //    return new StringVector((string[])theArray);
+            //else
+            return new Vector<object>(theArray);       
         }
 
         public object[] mode()//works with any type of matrix
