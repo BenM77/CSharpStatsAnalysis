@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace CSharpStatsAnalysis//hjkhkjhjhjhkjhjhhj
+namespace CSharpStatsAnalysis
 {
     public class Matrix
     {
@@ -8,8 +8,39 @@ namespace CSharpStatsAnalysis//hjkhkjhjhjhkjhjhhj
         private int dimR, dimC; // track the dimensions of the matrix
         private Object[,] theMatrix;
 
+        public static Matrix operator +(Matrix m1, Matrix m2)
+        {
+            if (m1.matrixType != typeof(Double))
+                throw new Exception("Cannot add matrices of non-numeric types");
+            if (m1.dimC != m2.dimC)
+                throw new Exception("The matrices to add have different numbers of columns");
+            if (m1.dimR != m2.dimR)
+                throw new Exception("The matrices to add have different numbers of rows");
+            if (m1.matrixType != m2.matrixType)
+                throw new Exception("The matrices to add have different types");
+            Matrix newMatrix = new Matrix(m1.dimR, m1.dimC, m1.matrixType);
+            for(int i = 0; i < m1.dimR; i++)
+                for(int j = 0; j < m1.dimC; j++)
+                {
+                    newMatrix.theMatrix[j, i] = (Double)m1.theMatrix[j, i] + (Double)m2.theMatrix[j, i]; //type casts are redundant but required because the compiler does not know about the first if statement
+                }
+            return newMatrix;
+        }
+
+        public Matrix(int newDimR, int newDimC, Type T)//create a new matrix without initializing any values
+        {
+            if (newDimR < 1)
+                throw new Exception("The number of rows in a new matrix must be at least one");
+            if (newDimC < 1)
+                throw new Exception("The number of columns in a new matrix must be at least one");
+            dimR = newDimR;
+            dimC = newDimC;
+            matrixType = T;
+            theMatrix = new Object[dimR, dimC];
+        }
+
         // a constructor that takes two vectors as rows or columns
-        public Matrix(Vector<Type> v1, Vector<Type> v2, bool bindRow)// if bindRow is true, add the vectors as rows instead of as columns
+        public Matrix(Vector<Object> v1, Vector<Object> v2, bool bindRow)// if bindRow is true, add the vectors as rows instead of as columns
         {
             int v1Length = v1.getLength();
             int v2length = v2.getLength();
@@ -56,7 +87,7 @@ namespace CSharpStatsAnalysis//hjkhkjhjhjhkjhjhhj
         }
 
         //create a new matrix by giving all the elements in a vector and the number of rows(length of each column) and vice versa for columns
-        public Matrix(Vector<Type> v1, int numRows, int numCols)
+        public Matrix(Vector<Object> v1, int numRows, int numCols)
         {
             if ((numRows * numCols) < v1.getLength())
                 throw new Exception("A matrix of those dimensions does not have enough spaces for all the elements in that vector");
@@ -90,7 +121,7 @@ namespace CSharpStatsAnalysis//hjkhkjhjhjhkjhjhhj
             theMatrix[row, column] = value;
         }
 
-        public void edit(Vector<Type> v1, int index, bool replaceRow)
+        public void edit(Vector<Object> v1, int index, bool replaceRow)
         {
             if (v1.getType() != matrixType)
                 throw new Exception("the vector must have the same type as the matrix it is being put into");
@@ -154,6 +185,76 @@ namespace CSharpStatsAnalysis//hjkhkjhjhjhkjhjhhj
             {
                 Console.Write("{0}\t",theMatrix[row, i]);
             }
+        }
+
+        //the following are statistical functions
+        public double max()
+        {
+            if (matrixType != typeof(Double))
+                throw new Exception("The max method can only be used on numeric type matrices");
+            double theMax = (double)theMatrix[1, 1];//the default starting value. typecast required because the compiler does not know the matrix is of type double
+            double temp;
+            for(int i = 0; i < dimC; i++)
+                for(int j = 0; j < dimR; j++)
+                {
+                    temp = (double)theMatrix[j, i];
+                    if (temp > theMax)
+                        theMax = temp;
+                }
+            return theMax;
+        }
+
+        public double min()
+        {
+            if (matrixType != typeof(Double))
+                throw new Exception("The min method can only be used on numeric type matrices");
+            double theMin = (double)theMatrix[1, 1];
+            double temp;
+            for (int i = 0; i < dimC; i++)
+                for (int j = 0; j < dimR; j++)
+                {
+                    temp = (double)theMatrix[j, i];
+                    if (temp < theMin)
+                        theMin = temp;
+                }
+            return theMin;
+        }
+
+        public double mean()
+        {
+            if (matrixType != typeof(Double))
+                throw new Exception("the mean method can obly be used on numeric type matrices");
+            double total = 0;
+            for(int i = 0; i < dimC; i++)
+                for(int j = 0; j < dimR; j++)
+                {
+                    total += (double)theMatrix[j, i];
+                }
+            return total / (dimC * dimR);//total / number of elements
+        }
+
+        public Vector<Object> convertToVector()//the opposite of the second constructor-- takes a matrix and returns a vector
+        {
+            Object[] theArray = new Object[dimC * dimR];
+            int arrayIndex = 0;
+            for(int i = 0; i < dimC; i++)
+                for(int j = 0; j < dimR; j++)
+                {
+                    theArray[arrayIndex] = (double)theMatrix[j, i];
+                    arrayIndex++;
+                }
+            //if (matrixType == typeof(Double))
+            //    return new NumberVector((double[])theArray);
+            //if (matrixType == typeof(String))
+            //    return new StringVector((string[])theArray);
+            //else
+                return new Vector<object>(theArray);       
+        }
+
+        public object[] mode()//works with any type of matrix
+        {
+            Vector<object> tempVector = convertToVector();
+            return tempVector.getMode();
         }
     }
 }
