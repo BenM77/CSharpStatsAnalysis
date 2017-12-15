@@ -11,8 +11,10 @@ namespace CSharpStatsAnalysis
     {
         static void Main(string[] args)
         {
-            int[] arr = new int[] { 2, 2, 2, 4, 5, 7 };
-            NumberVector nv = new NumberVector(0, 5, arr);
+            NumberVector nv = new NumberVector(1, 10, false);
+            nv.getMedian();
+            nv.getLowerQuartile();
+            nv.getUpperQuartile();
             nv.displayStats();
         }
     }

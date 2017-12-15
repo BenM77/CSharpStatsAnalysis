@@ -8,6 +8,18 @@ namespace CSharpStatsAnalysis
 {
     class NumberVector : Vector<double>
     {
+        // standard double array
+        public NumberVector(double[] arr)
+        {
+            vecArr = arr;
+        }
+
+        // standard int array
+        public NumberVector(int[] arr)
+        {
+            vecArr = arr.Select(d => (double)d).ToArray();
+        }
+
         // repeat or sequence
         public NumberVector(int start, int endOrLength, bool repeat)
         {
@@ -38,12 +50,19 @@ namespace CSharpStatsAnalysis
         }
 
         // repeat with end parameter
-        public NumberVector(int start, int end, int length)
+        public NumberVector(int start, int end, int numRepeats)
         {
+            if(start > end)
+            {
+                int temp = start;
+                start = end;
+                end = temp;
+            }
+
             int counter = start;
 
-            vecArr = new double[length];
-            for (int i = 0; i < length; i++)
+            vecArr = new double[(end-start)*numRepeats];
+            for (int i = 0; i < vecArr.Length; i++)
             {
                 vecArr[i] = counter++;
                 if (counter == end)
@@ -167,7 +186,14 @@ namespace CSharpStatsAnalysis
             testArray();
             double[] vecArrCopy = vecArr;
             Array.Sort(vecArrCopy);
-            return vecArrCopy[vecArrCopy.Length / 2];
+
+            // odd number of elements
+            if (vecArr.Length % 2 == 1)
+                return vecArrCopy[vecArrCopy.Length / 2];
+
+            double result = vecArrCopy[vecArrCopy.Length / 2] + vecArrCopy[(vecArrCopy.Length / 2) - 1];
+            // even number of elements
+            return result / 2.0;
         }
 
         public double getMin()
@@ -196,12 +222,52 @@ namespace CSharpStatsAnalysis
             return max;
         }
 
+        public double getLowerQuartile()
+        {
+            testArray();
+            double[] vecArrCopy = vecArr;
+            Array.Sort(vecArrCopy);
+
+            double[] lowerHalf = vecArrCopy.Take(vecArrCopy.Length / 2).ToArray();
+
+            // odd number of elements
+            if (lowerHalf.Length % 2 != 0)
+                return lowerHalf[lowerHalf.Length / 2];
+
+            double test = lowerHalf[lowerHalf.Length / 2];
+            // even number of elements
+            return (lowerHalf[lowerHalf.Length / 2] + lowerHalf[(lowerHalf.Length / 2) - 1]) / 2.0;
+        }
+
+        public double getUpperQuartile()
+        {
+            testArray();
+            double[] vecArrCopy = vecArr;
+            Array.Sort(vecArrCopy);
+
+            int skipFactor;
+            skipFactor = vecArrCopy.Length / 2;
+
+            if (vecArrCopy.Length % 2 == 1)
+                skipFactor++;
+            double[] upperHalf = vecArrCopy.Skip(skipFactor).Take(vecArrCopy.Length / 2).ToArray();
+
+            // odd number of elements
+            if (upperHalf.Length % 2 != 0)
+                return upperHalf[upperHalf.Length / 2];
+
+            // even number of elements
+            double result = (upperHalf[upperHalf.Length / 2] + upperHalf[(upperHalf.Length / 2) - 1]);
+            return  result / 2.0;
+        }
+
         public void displayStats()
         {
             Console.WriteLine("Minimum: " + getMin());
             Console.WriteLine("Maximum: " + getMax());
             Console.WriteLine("Mean: " + getMean());
             Console.WriteLine("Median: " + getMedian());
+
             Console.Write("Mode: ");
             double[] modeArr = getMode();
             foreach(double x in modeArr)
@@ -210,6 +276,10 @@ namespace CSharpStatsAnalysis
                 if(x != modeArr[modeArr.Length - 1])
                     Console.Write(", ");
             }
+            Console.WriteLine();
+
+            Console.WriteLine("Lower Quartile (25%): " + getLowerQuartile());
+            Console.WriteLine("Upper Quartile (75%): " + getUpperQuartile());
             Console.WriteLine("\n");
         }
     }

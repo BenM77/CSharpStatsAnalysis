@@ -12,6 +12,11 @@ namespace CSharpStatsAnalysis
         public Vector(){
         }
 
+        public Vector(T[] arr)
+        {
+            vecArr = arr;
+        }
+
         public void display()
         {
             Console.Write("{");
