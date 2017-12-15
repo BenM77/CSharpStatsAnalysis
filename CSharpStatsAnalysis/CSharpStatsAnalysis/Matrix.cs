@@ -30,11 +30,11 @@ namespace CSharpStatsAnalysis
                 dimR = 2;
                 dimC = dimension;
                 theMatrix = new v1Type[dimR, dimC];
-                for(int i = 0; i < v1Length; i++)//fill in row 1
+                for (int i = 0; i < v1Length; i++)//fill in row 1
                 {
                     theMatrix[1, i] = v1.getVal(i);
                 }
-                for(int i = 0; i < v2length; i++)//fill in row 2
+                for (int i = 0; i < v2length; i++)//fill in row 2
                 {
                     theMatrix[2, i] = v2.getVal(i);
                 }
@@ -44,11 +44,11 @@ namespace CSharpStatsAnalysis
                 dimR = dimension;
                 dimC = 2;
                 theMatrix = new v1Type[dimR, dimC];
-                for(int i = 0; i < v1Length; i++)
+                for (int i = 0; i < v1Length; i++)
                 {
                     theMatrix[i, 1] = v1.getVal(i);
                 }
-                for(int i = 0; i < v2length; i++)
+                for (int i = 0; i < v2length; i++)
                 {
                     theMatrix[i, 2] = v2.getVal(i);
                 }
@@ -62,9 +62,9 @@ namespace CSharpStatsAnalysis
                 throw new Exception("A matrix of those dimensions does not have enough spaces for all the elements in that vector");
             theMatrix = new Array[numRows, numCols];
             int vectorIndex = 0;
-            for(int i = 0; i < numRows; i++)
+            for (int i = 0; i < numRows; i++)
             {
-                for(int j = 0; j < numCols; j++)
+                for (int j = 0; j < numCols; j++)
                 {
                     if (vectorIndex <= v1.getLength())
                     {

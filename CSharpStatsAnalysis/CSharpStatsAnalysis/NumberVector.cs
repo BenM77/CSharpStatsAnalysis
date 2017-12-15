@@ -9,37 +9,31 @@ namespace CSharpStatsAnalysis
     class NumberVector : Vector<double>
     {
         // repeat or sequence
-        public NumberVector(int num, int num2, bool repeat)
+        public NumberVector(int start, int endOrLength, bool repeat)
         {
             // repeat
             if (repeat == true)
             {
-                if(num2 < 0)
-                {
+                if(endOrLength < 0)
                     throw new Exception("Cannot create vector: length is negative.");
-                }
-                // num2 is now length
-                vecArr = new double[num2];
+
+                vecArr = new double[endOrLength];
                 for (int i = 0; i < vecArr.Length; i++)
-                {
-                    vecArr[i] = num;
-                }
+                    vecArr[i] = start;
             }
             // sequence
             else
             {
-                if(num > num2)
+                if(start > endOrLength)
                 {
-                    int temp = num;
-                    num = num2;
-                    num2 = temp;
+                    int temp = start;
+                    start = endOrLength;
+                    endOrLength = temp;
                 }
 
-                vecArr = new double[(num2 - num)+1];
+                vecArr = new double[(endOrLength - start)+1];
                 for(int i = 0; i < vecArr.Length; i++)
-                {
-                    vecArr[i] = num++;
-                }
+                    vecArr[i] = start++;
             }
         }
 
@@ -62,9 +56,7 @@ namespace CSharpStatsAnalysis
         {
             int diff = end - start;
             if(diff != c.Length-1)
-            {
                 throw new Exception("Cannot create vector: given array is not the correct length to match with elements");
-            }
             else
             {
                 // checking to see if any integer within the array is less than 0
@@ -77,24 +69,22 @@ namespace CSharpStatsAnalysis
                 }
                 vecArr = new double[numVecElements];
 
+                // number of times an element should be repeated, as determined by its respective value in the c array
                 int vecCounter;
+                // index of current vecArr element
                 int vecIndex = 0;
+                // index of the c array
                 int cIndex = 0;
                 for(int i = start; i <= end; i++)
                 {
                     vecCounter = 0;
+                    // getting the number of times the current element should be repeated
                     vecCounter = c[cIndex];
 
-                    int vecInc = vecIndex;
-                    while(vecIndex < vecInc + vecCounter)
-                    {
-                        if(vecIndex > vecArr.Length)
-                        {
-                            // throw exception?
-                            break;
-                        }
+                    // initial index before the current element is added to the vecArr
+                    int vecInitialIndex = vecIndex;
+                    while(vecIndex < vecInitialIndex + vecCounter)
                         vecArr[vecIndex++] = i;
-                    }
 
                     cIndex++;
                 }
@@ -154,8 +144,16 @@ namespace CSharpStatsAnalysis
             }
         }
 
+        // tests to see if values exist within the vector's array
+        private void testArray()
+        {
+            if (vecArr.Length == 0)
+                throw new Exception("Cannot calculate statistics on vector: the vector's array contains no numbers");
+        }
+
         public double getMean()
         {
+            testArray();
             double total = 0;
             foreach(double x in vecArr)
             {
@@ -166,35 +164,53 @@ namespace CSharpStatsAnalysis
 
         public double getMedian()
         {
+            testArray();
             double[] vecArrCopy = vecArr;
             Array.Sort(vecArrCopy);
             return vecArrCopy[vecArrCopy.Length / 2];
         }
 
-        public double[] getMode()
+        public double getMin()
         {
-            Dictionary<double, int> vecDict = new Dictionary<double, int>();
-            foreach(double v in vecArr)
-            {
-                if (vecDict.Keys.Contains(v))
-                    vecDict[v]++;
-                else
-                    vecDict.Add(v, 0);
-            }
+            testArray();
 
-            // using array in case of multiple modes
-            double[] results = new double[vecArr.Length];
-            int modeNum = vecDict.Values.Max();
-
-            int resultsIndex = 0;
-            foreach(KeyValuePair<double, int> kvp in vecDict)
+            double min = vecArr[0];
+            for(int i = 1; i < vecArr.Length; i++)
             {
-                if(kvp.Value == modeNum)
-                {
-                    results[resultsIndex++] = kvp.Key;
-                }
+                if (vecArr[i] < min)
+                    min = vecArr[i];
             }
-            return results.Take(resultsIndex).ToArray();
+            return min;
+        }
+
+        public double getMax()
+        {
+            testArray();
+
+            double max = vecArr[0];
+            for(int i = 1; i < vecArr.Length; i++)
+            {
+                if (vecArr[i] > max)
+                    max = vecArr[i];
+            }
+            return max;
+        }
+
+        public void displayStats()
+        {
+            Console.WriteLine("Minimum: " + getMin());
+            Console.WriteLine("Maximum: " + getMax());
+            Console.WriteLine("Mean: " + getMean());
+            Console.WriteLine("Median: " + getMedian());
+            Console.Write("Mode: ");
+            double[] modeArr = getMode();
+            foreach(double x in modeArr)
+            {
+                Console.Write(x);
+                if(x != modeArr[modeArr.Length - 1])
+                    Console.Write(", ");
+            }
+            Console.WriteLine("\n");
         }
     }
 }

@@ -55,5 +55,10 @@ namespace CSharpStatsAnalysis
             }
             return results.Take(resultsIndex).ToArray();
         }
+
+        public T[] getVecArr()
+        {
+            return vecArr;
+        }
     }
 }

@@ -11,9 +11,9 @@ namespace CSharpStatsAnalysis
     {
         static void Main(string[] args)
         {
-            int[] arr = new int[] { 2, 2, 2 };
-            NumberVector nv = new NumberVector(0, 3,);
-            nv.display();
+            int[] arr = new int[] { 2, 2, 2, 4, 5, 7 };
+            NumberVector nv = new NumberVector(0, 5, arr);
+            nv.displayStats();
         }
     }
 }
