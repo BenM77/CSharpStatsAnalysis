@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CSharpStatsAnalysis
 {
-    class Vector<T>
+    public class Vector<T>
     {
         protected T[] vecArr;
         public Vector(){
@@ -28,6 +28,16 @@ namespace CSharpStatsAnalysis
         public Type getType()
         {
             return typeof(T);
+        }
+
+        public T getVal(int index)
+        {
+            return vecArr[index];
+        }
+
+        public int getLength()
+        {
+            return vecArr.Length;
         }
 
         public T[] getMode()
