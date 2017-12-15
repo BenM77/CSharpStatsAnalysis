@@ -243,11 +243,6 @@ namespace CSharpStatsAnalysis
                     theArray[arrayIndex] = (double)theMatrix[j, i];
                     arrayIndex++;
                 }
-            //if (matrixType == typeof(Double))
-            //    return new NumberVector((double[])theArray);
-            //if (matrixType == typeof(String))
-            //    return new StringVector((string[])theArray);
-            //else
                 return new Vector<object>(theArray);       
         }
 
